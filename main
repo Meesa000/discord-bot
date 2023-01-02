@@ -1,0 +1,59 @@
+import discord
+from discord.ext import commands
+import random
+
+
+
+intents = discord.Intents.default()
+intents.message_content = True
+intents.reactions = True
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+
+@bot.event
+async def on_ready():
+    print(f"{bot.user} has logged in.")
+    channel = bot.get_channel(1038401470900482130)
+    await channel.send(f"Do !commands to see the list of commands.")
+
+commands_list = "\n----COMMANDS LIST----\n!commands\n!hi\n!dm\n!ping\n!meme"
+
+
+# !commands
+@bot.command(name="commands", help="Bot lists all commands")
+async def on_message(ctx):
+    await ctx.send(commands_list)
+
+
+# !hi
+@bot.command(name="hi", help="Bot says: Hello, (Username)")
+async def on_message(ctx):
+    username = ctx.author.name.rsplit("#", 1)[0]
+    await ctx.send(f"Hello, {username}!")
+
+
+# !DM
+@bot.command(name="dm", help= "DM's user")
+async def on_message(ctx):
+    username = ctx.author.name.rsplit("#", 1)[0]
+    await ctx.author.send(f"{username}, you asked for a DM, so here it is!")
+
+
+# !ping
+@bot.command()
+async def ping(ctx):
+    await ctx.send("Pong!")
+
+
+# !meme
+@bot.command()
+async def meme(ctx):
+    memes = [r"C:\Users\asim_\OneDrive\Desktop\Discord bot\Images\meme1.jpg",  # list of pictures for !meme
+             r"C:\Users\asim_\OneDrive\Desktop\Discord bot\Images\meme2.jpg",
+             r"C:\Users\asim_\OneDrive\Desktop\Discord bot\Images\meme3.jpg"
+             ]
+    selected_meme = random.choice(memes)
+    await ctx.send(file=discord.File(selected_meme))
+
+
+bot.run("")
